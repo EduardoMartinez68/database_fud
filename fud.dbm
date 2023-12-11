@@ -1,0 +1,1136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+CAUTION: Do not modify this file unless you know what you are doing.
+         Unexpected results may occur if the code is changed deliberately.
+-->
+<dbmodel pgmodeler-ver="0.7.0">
+<database name="new_database">
+</database>
+
+<schema name="Fud" fill-color="#e1e1e1">
+</schema>
+
+<schema name="Company" fill-color="#e1e1e1">
+</schema>
+
+<schema name="User" fill-color="#e1e1e1">
+</schema>
+
+<schema name="Branch" fill-color="#e1e1e1">
+</schema>
+
+<schema name="Employee" fill-color="#e1e1e1">
+</schema>
+
+<schema name="Customer" fill-color="#e1e1e1">
+</schema>
+
+<schema name="Box" fill-color="#e1e1e1">
+</schema>
+
+<schema name="Kitchen" fill-color="#e1e1e1">
+</schema>
+
+<table name="users">
+	<schema name="&quot;Fud&quot;"/>
+	<position x="40" y="24"/>
+	<column name="id">
+		<type name="bigserial"/>
+	</column>
+	<column name="photo">
+		<type name="text"/>
+	</column>
+	<column name="user_name" not-null="true">
+		<type name="varchar" length="200"/>
+	</column>
+	<column name="email" not-null="true">
+		<type name="varchar" length="100"/>
+	</column>
+	<column name="password" not-null="true">
+		<type name="text" length="30"/>
+	</column>
+	<column name="first_name" not-null="true">
+		<type name="varchar" length="30"/>
+	</column>
+	<column name="second_name">
+		<type name="varchar" length="30"/>
+	</column>
+	<column name="last_name" not-null="true">
+		<type name="varchar" length="90"/>
+	</column>
+	<constraint name="key_user" type="pk-constr" factor="10" table="&quot;Fud&quot;.users">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+	<constraint name="user_u" type="uq-constr" factor="10" table="&quot;Fud&quot;.users">
+		<columns names="user_name" ref-type="src-columns"/>
+	</constraint>
+	<constraint name="key_email_user" type="uq-constr" factor="100" table="&quot;Fud&quot;.users">
+		<columns names="email" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="companies">
+	<schema name="&quot;User&quot;"/>
+	<position x="322" y="17"/>
+	<column name="id">
+		<type name="bigserial"/>
+	</column>
+	<column name="num_ext">
+		<type name="varchar" length="5"/>
+	</column>
+	<column name="postal_code">
+		<type name="varchar" length="30"/>
+	</column>
+	<column name="city">
+		<type name="text"/>
+	</column>
+	<column name="municipality">
+		<type name="text"/>
+	</column>
+	<column name="alias">
+		<type name="varchar" length="30"/>
+	</column>
+	<column name="num_int">
+		<type name="varchar" length="5"/>
+	</column>
+	<column name="description">
+		<type name="text"/>
+	</column>
+	<column name="cologne">
+		<type name="text"/>
+	</column>
+	<column name="representative">
+		<type name="text"/>
+	</column>
+	<column name="states">
+		<type name="text"/>
+	</column>
+	<column name="ceo">
+		<type name="text"/>
+	</column>
+	<column name="path_logo">
+		<type name="text"/>
+	</column>
+	<column name="phone">
+		<type name="varchar" length="20"/>
+	</column>
+	<column name="name">
+		<type name="varchar" length="30"/>
+	</column>
+	<column name="cell_phone">
+		<type name="varchar" length="20"/>
+	</column>
+	<column name="email">
+		<type name="varchar" length="100"/>
+	</column>
+	<column name="street">
+		<type name="varchar" length="50"/>
+	</column>
+	<constraint name="key_company" type="pk-constr" factor="10" table="&quot;User&quot;.companies">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<relationship name="users_has_many_companies" type="rel1n"
+	 src-col-pattern="{sc}_{st}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 col-indexes="1" constr-indexes="1"
+	 src-table="&quot;Fud&quot;.users"
+	 dst-table="&quot;User&quot;.companies"
+	 src-required="false" dst-required="false"/>
+
+<table name="employees">
+	<schema name="&quot;Company&quot;"/>
+	<position x="577" y="303"/>
+	<column name="id">
+		<type name="bigserial"/>
+	</column>
+	<constraint name="key_employees" type="pk-constr" factor="10" table="&quot;Company&quot;.employees">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<relationship name="companies_has_many_employees" type="rel1n"
+	 src-col-pattern="{sc}_{st}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 col-indexes="1" constr-indexes="1"
+	 src-table="&quot;User&quot;.companies"
+	 dst-table="&quot;Company&quot;.employees"
+	 src-required="false" dst-required="false"/>
+
+<table name="packs_fud">
+	<schema name="&quot;Fud&quot;"/>
+	<position x="43" y="209"/>
+	<column name="id">
+		<type name="int2"/>
+	</column>
+	<constraint name="key" type="pk-constr" factor="10" table="&quot;Fud&quot;.packs_fud">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<relationship name="packs_fud_has_many_users" type="rel1n"
+	 src-col-pattern="{sc}_{st}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 col-indexes="8" constr-indexes="2"
+	 src-table="&quot;Fud&quot;.packs_fud"
+	 dst-table="&quot;Fud&quot;.users"
+	 src-required="false" dst-required="false"/>
+
+<table name="products_dish_supplies">
+	<schema name="&quot;Kitchen&quot;"/>
+	<position x="2018.67" y="27"/>
+	<column name="id" not-null="true">
+		<type name="bigserial"/>
+	</column>
+	<column name="barcode" not-null="true">
+		<type name="varchar" length="300"/>
+	</column>
+	<column name="description">
+		<type name="text"/>
+	</column>
+	<column name="type_dish">
+		<type name="smallint"/>
+	</column>
+	<column name="sells_for">
+		<type name="smallint"/>
+	</column>
+	<column name="use_inventory">
+		<type name="boolean"/>
+	</column>
+	<column name="minimum_inventory">
+		<type name="double precision"/>
+	</column>
+	<column name="max_inventory">
+		<type name="double precision"/>
+	</column>
+	<column name="img">
+		<type name="text"/>
+	</column>
+	<column name="name" not-null="true">
+		<type name="varchar" length="60"/>
+	</column>
+	<constraint name="key_product" type="pk-constr" factor="10" table="&quot;Kitchen&quot;.products_dish_supplies">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<relationship name="companies_has_many_inventary" type="rel1n"
+	 src-col-pattern="{sc}_{st}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 col-indexes="1" constr-indexes="1"
+	 src-table="&quot;User&quot;.companies"
+	 dst-table="&quot;Kitchen&quot;.products_dish_supplies"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="employees_has_one_users" type="rel11"
+	 src-col-pattern="{sc}_{st}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 col-indexes="2" constr-indexes="2,3"
+	 src-table="&quot;Fud&quot;.users"
+	 dst-table="&quot;Company&quot;.employees"
+	 src-required="false" dst-required="false"/>
+
+<table name="roles_employees">
+	<schema name="&quot;Employee&quot;"/>
+	<position x="1179" y="21"/>
+	<column name="id">
+		<type name="bigserial"/>
+	</column>
+	<column name="commissions" not-null="true">
+		<type name="double precision"/>
+	</column>
+	<column name="type_of_salary">
+		<type name="smallint"/>
+	</column>
+	<column name="salary">
+		<type name="double precision"/>
+	</column>
+	<column name="discount_for_product">
+		<type name="double precision"/>
+	</column>
+	<column name="p1">
+		<type name="boolean"/>
+	</column>
+	<column name="p2">
+		<type name="boolean"/>
+	</column>
+	<column name="p3">
+		<type name="boolean"/>
+	</column>
+	<column name="p4">
+		<type name="boolean"/>
+	</column>
+	<column name="p5">
+		<type name="boolean"/>
+	</column>
+	<column name="p6">
+		<type name="boolean"/>
+	</column>
+	<column name="p7">
+		<type name="boolean"/>
+	</column>
+	<column name="p8">
+		<type name="boolean"/>
+	</column>
+	<column name="p9">
+		<type name="boolean"/>
+	</column>
+	<column name="p11">
+		<type name="boolean"/>
+	</column>
+	<column name="p12">
+		<type name="boolean"/>
+	</column>
+	<column name="p13">
+		<type name="boolean"/>
+	</column>
+	<column name="p14">
+		<type name="boolean"/>
+	</column>
+	<column name="p15">
+		<type name="boolean"/>
+	</column>
+	<column name="p16">
+		<type name="boolean"/>
+	</column>
+	<column name="p17">
+		<type name="boolean"/>
+	</column>
+	<column name="p18">
+		<type name="boolean"/>
+	</column>
+	<column name="p19">
+		<type name="boolean"/>
+	</column>
+	<column name="name" not-null="true">
+		<type name="varchar" length="30"/>
+	</column>
+	<column name="description">
+		<type name="text"/>
+	</column>
+	<constraint name="key_roles" type="pk-constr" factor="10" table="&quot;Employee&quot;.roles_employees">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<relationship name="roles_has_many_employees" type="rel1n"
+	 src-col-pattern="{sc}_{st}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 col-indexes="3" constr-indexes="4"
+	 src-table="&quot;Employee&quot;.roles_employees"
+	 dst-table="&quot;Company&quot;.employees"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="companies_has_many_roles" type="rel1n"
+	 src-col-pattern="{sc}_{st}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 col-indexes="1" constr-indexes="1"
+	 src-table="&quot;User&quot;.companies"
+	 dst-table="&quot;Employee&quot;.roles_employees"
+	 src-required="false" dst-required="false"/>
+
+<table name="departments_employees">
+	<schema name="&quot;Employee&quot;"/>
+	<position x="1183" y="453"/>
+	<column name="id">
+		<type name="bigserial"/>
+	</column>
+	<column name="description">
+		<type name="text"/>
+	</column>
+	<column name="name" not-null="true">
+		<type name="varchar" length="100"/>
+	</column>
+	<constraint name="key_areas" type="pk-constr" factor="10" table="&quot;Employee&quot;.departments_employees">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<relationship name="companies_has_many_areas" type="rel1n"
+	 src-col-pattern="{sc}_{st}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 col-indexes="1" constr-indexes="1"
+	 src-table="&quot;User&quot;.companies"
+	 dst-table="&quot;Employee&quot;.departments_employees"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="areas_has_many_employees" type="rel1n"
+	 src-col-pattern="{sc}_{st}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 col-indexes="4" constr-indexes="5"
+	 src-table="&quot;Employee&quot;.departments_employees"
+	 dst-table="&quot;Company&quot;.employees"
+	 src-required="false" dst-required="false">
+	<label ref-type="name-label">
+		<position x="0" y="0"/>
+	</label>
+</relationship>
+
+<table name="customers">
+	<schema name="&quot;Company&quot;"/>
+	<position x="579" y="436"/>
+	<column name="id" not-null="true">
+		<type name="bigserial"/>
+	</column>
+	<column name="email">
+		<type name="text"/>
+	</column>
+	<column name="street">
+		<type name="text"/>
+	</column>
+	<column name="first_name" not-null="true">
+		<type name="varchar" length="50"/>
+	</column>
+	<column name="num_ext">
+		<type name="varchar" length="8"/>
+	</column>
+	<column name="last_name">
+		<type name="varchar" length="300"/>
+	</column>
+	<column name="points">
+		<type name="smallint"/>
+	</column>
+	<column name="phone">
+		<type name="varchar" length="20"/>
+	</column>
+	<column name="cologne">
+		<type name="text"/>
+	</column>
+	<column name="city">
+		<type name="text"/>
+	</column>
+	<column name="birthday">
+		<type name="date"/>
+	</column>
+	<column name="num_int">
+		<type name="varchar" length="8"/>
+	</column>
+	<column name="postal_code">
+		<type name="varchar" length="10"/>
+	</column>
+	<column name="second_name">
+		<type name="varchar" length="50"/>
+	</column>
+	<column name="cell_phone">
+		<type name="varchar" length="20"/>
+	</column>
+	<constraint name="key_customer" type="pk-constr" factor="10" table="&quot;Company&quot;.customers">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<relationship name="companies_has_many_customers" type="rel1n"
+	 src-col-pattern="{sc}_{st}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 col-indexes="1" constr-indexes="0"
+	 src-table="&quot;User&quot;.companies"
+	 dst-table="&quot;Company&quot;.customers"
+	 src-required="false" dst-required="false"/>
+
+<table name="sales_history">
+	<schema name="&quot;Box&quot;"/>
+	<position x="1500" y="28"/>
+	<column name="id">
+		<type name="bigserial"/>
+	</column>
+	<column name="sale_day">
+		<type name="date"/>
+	</column>
+	<constraint name="key_sales_history" type="pk-constr" factor="10" table="&quot;Box&quot;.sales_history">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<relationship name="customers_has_many_record" type="rel1n"
+	 src-col-pattern="{sc}_{st}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 col-indexes="3" constr-indexes="1"
+	 src-table="&quot;Company&quot;.customers"
+	 dst-table="&quot;Box&quot;.sales_history"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="employees_has_many_record" type="rel1n"
+	 src-col-pattern="{sc}_{st}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 col-indexes="2" constr-indexes="2"
+	 src-table="&quot;Company&quot;.employees"
+	 dst-table="&quot;Box&quot;.sales_history"
+	 src-required="false" dst-required="false"/>
+
+<table name="branches">
+	<schema name="&quot;Company&quot;"/>
+	<position x="578" y="28"/>
+	<column name="id" not-null="true">
+		<type name="bigserial"/>
+	</column>
+	<column name="city" not-null="true">
+		<type name="text"/>
+	</column>
+	<column name="state" not-null="true">
+		<type name="text"/>
+	</column>
+	<column name="municipality" not-null="true">
+		<type name="text"/>
+	</column>
+	<column name="name_branch" not-null="true">
+		<type name="varchar" length="60"/>
+	</column>
+	<column name="alias" not-null="true">
+		<type name="varchar" length="30"/>
+	</column>
+	<column name="representative">
+		<type name="text"/>
+	</column>
+	<column name="cell_phone">
+		<type name="varchar" length="24"/>
+	</column>
+	<column name="email" not-null="true">
+		<type name="text"/>
+	</column>
+	<column name="street">
+		<type name="varchar" length="40"/>
+	</column>
+	<column name="num_ext">
+		<type name="varchar" length="8"/>
+	</column>
+	<column name="num_int">
+		<type name="varchar" length="8"/>
+	</column>
+	<column name="postal_code" not-null="true">
+		<type name="varchar" length="10"/>
+	</column>
+	<column name="cologne" not-null="true">
+		<type name="text"/>
+	</column>
+	<constraint name="key_branches" type="pk-constr" factor="10" table="&quot;Company&quot;.branches">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<relationship name="companies_has_many_branches" type="rel1n"
+	 src-col-pattern="{sc}_{st}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 col-indexes="1" constr-indexes="1"
+	 src-table="&quot;User&quot;.companies"
+	 dst-table="&quot;Company&quot;.branches"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="branches_has_many_employees" type="rel1n"
+	 src-col-pattern="{sc}_{st}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 col-indexes="5" constr-indexes="6"
+	 src-table="&quot;Company&quot;.branches"
+	 dst-table="&quot;Company&quot;.employees"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="branches_has_many_customers" type="rel1n"
+	 src-col-pattern="{sc}_{st}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 col-indexes="2" constr-indexes="2"
+	 src-table="&quot;Company&quot;.branches"
+	 dst-table="&quot;Company&quot;.customers"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="branches_has_many_record" type="rel1n"
+	 src-col-pattern="{sc}_{st}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 col-indexes="4" constr-indexes="3"
+	 src-table="&quot;Company&quot;.branches"
+	 dst-table="&quot;Box&quot;.sales_history"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="companies_has_many_record" type="rel1n"
+	 src-col-pattern="{sc}_{st}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 col-indexes="5" constr-indexes="4"
+	 src-table="&quot;User&quot;.companies"
+	 dst-table="&quot;Box&quot;.sales_history"
+	 src-required="false" dst-required="false"/>
+
+<table name="schedules">
+	<schema name="&quot;Employee&quot;"/>
+	<position x="1186" y="557"/>
+	<column name="id">
+		<type name="bigserial"/>
+	</column>
+	<constraint name="key" type="pk-constr" factor="10" table="&quot;Employee&quot;.schedules">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<relationship name="branches_has_many_schedules" type="rel1n"
+	 src-col-pattern="{sc}_{st}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 col-indexes="1" constr-indexes="1"
+	 src-table="&quot;Company&quot;.branches"
+	 dst-table="&quot;Employee&quot;.schedules"
+	 src-required="false" dst-required="false"/>
+
+<table name="product_features">
+	<schema name="&quot;Kitchen&quot;"/>
+	<position x="2017.44" y="236.444"/>
+	<column name="id" not-null="true">
+		<type name="bigserial"/>
+	</column>
+	<column name="revenue_2">
+		<type name="double precision"/>
+	</column>
+	<column name="price_3">
+		<type name="double precision"/>
+	</column>
+	<column name="revenue_3">
+		<type name="double precision"/>
+	</column>
+	<column name="existence">
+		<type name="double precision"/>
+	</column>
+	<column name="sat_key">
+		<type name="text"/>
+	</column>
+	<column name="provider">
+		<type name="bigint"/>
+	</column>
+	<column name="amount" not-null="true">
+		<type name="double precision"/>
+	</column>
+	<column name="purchase_unit" not-null="true">
+		<type name="varchar" length="12"/>
+	</column>
+	<column name="product_cost" not-null="true">
+		<type name="double precision"/>
+	</column>
+	<column name="price_1" not-null="true">
+		<type name="double precision"/>
+	</column>
+	<column name="revenue_1" not-null="true">
+		<type name="double precision"/>
+	</column>
+	<column name="price_2">
+		<type name="double precision"/>
+	</column>
+	<constraint name="key_product_features" type="pk-constr" factor="10" table="&quot;Kitchen&quot;.product_features">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="country">
+	<schema name="&quot;Fud&quot;"/>
+	<position x="41" y="266"/>
+	<column name="id">
+		<type name="bigserial"/>
+	</column>
+	<column name="name">
+		<type name="varchar" length="50"/>
+	</column>
+	<constraint name="key_country" type="pk-constr" factor="10" table="&quot;Fud&quot;.country">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<relationship name="country_has_many_companies" type="rel1n"
+	 src-col-pattern="{sc}_{st}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 col-indexes="6" constr-indexes="2"
+	 src-table="&quot;Fud&quot;.country"
+	 dst-table="&quot;User&quot;.companies"
+	 src-required="false" dst-required="false"/>
+
+<table name="commanders">
+	<schema name="&quot;Kitchen&quot;"/>
+	<position x="1720" y="246"/>
+	<column name="id">
+		<type name="bigserial"/>
+	</column>
+	<column name="commander_date">
+		<type name="date"/>
+	</column>
+	<column name="status">
+		<type name="integer"/>
+	</column>
+	<column name="comentary">
+		<type name="text"/>
+	</column>
+	<constraint name="key_commander" type="pk-constr" factor="10" table="&quot;Kitchen&quot;.commanders">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<relationship name="branches_has_many_commanders" type="rel1n"
+	 src-col-pattern="{sc}_{st}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 col-indexes="1" constr-indexes="1"
+	 src-table="&quot;Company&quot;.branches"
+	 dst-table="&quot;Kitchen&quot;.commanders"
+	 src-required="false" dst-required="false"/>
+
+<table name="tables">
+	<schema name="&quot;Branch&quot;"/>
+	<position x="887" y="206"/>
+	<column name="id">
+		<type name="bigserial"/>
+	</column>
+	<column name="name">
+		<type name="varchar" length="30"/>
+	</column>
+	<column name="table_number">
+		<type name="integer"/>
+	</column>
+	<column name="num_customers" default-value="0">
+		<type name="smallint"/>
+	</column>
+	<constraint name="key_table" type="pk-constr" factor="10" table="&quot;Branch&quot;.tables">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<relationship name="employees_has_many_commanders" type="rel1n"
+	 src-col-pattern="{sc}_{st}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 col-indexes="2" constr-indexes="2"
+	 src-table="&quot;Company&quot;.employees"
+	 dst-table="&quot;Kitchen&quot;.commanders"
+	 src-required="false" dst-required="false"/>
+
+<table name="reservation">
+	<schema name="&quot;Branch&quot;"/>
+	<position x="885" y="333"/>
+	<column name="id">
+		<type name="bigserial"/>
+	</column>
+	<column name="email">
+		<type name="text"/>
+	</column>
+	<column name="number_of_adult">
+		<type name="integer"/>
+	</column>
+	<column name="number_of_children">
+		<type name="integer"/>
+	</column>
+	<column name="reservation_date">
+		<type name="date"/>
+	</column>
+	<column name="reservation_time">
+		<type name="time"/>
+	</column>
+	<column name="reason">
+		<type name="text"/>
+	</column>
+	<column name="status">
+		<type name="integer"/>
+	</column>
+	<column name="customer_name">
+		<type name="varchar" length="100"/>
+	</column>
+	<column name="phone">
+		<type name="varchar" length="20"/>
+	</column>
+	<column name="commentary">
+		<type name="text"/>
+	</column>
+	<constraint name="key_reservation" type="pk-constr" factor="100" table="&quot;Branch&quot;.reservation">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<relationship name="branches_has_many_reservation" type="rel1n"
+	 src-col-pattern="{sc}_{st}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 col-indexes="1" constr-indexes="1"
+	 src-table="&quot;Company&quot;.branches"
+	 dst-table="&quot;Branch&quot;.reservation"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="tables_has_many_reservation" type="rel1n"
+	 src-col-pattern="{sc}_{st}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 col-indexes="2" constr-indexes="2"
+	 src-table="&quot;Branch&quot;.tables"
+	 dst-table="&quot;Branch&quot;.reservation"
+	 src-required="false" dst-required="false"/>
+
+<table name="pack_reservation">
+	<schema name="&quot;Branch&quot;"/>
+	<position x="881" y="592"/>
+	<column name="id" not-null="true">
+		<type name="bigserial"/>
+	</column>
+	<column name="name" not-null="true">
+		<type name="varchar" length="30"/>
+	</column>
+	<column name="description">
+		<type name="text"/>
+	</column>
+	<column name="number_of_adult">
+		<type name="integer"/>
+	</column>
+	<column name="number_of_children">
+		<type name="integer"/>
+	</column>
+	<column name="price_for_children">
+		<type name="double precision"/>
+	</column>
+	<column name="price_for_adult">
+		<type name="double precision"/>
+	</column>
+	<constraint name="key_pack_reservation" type="pk-constr" factor="100" table="&quot;Branch&quot;.pack_reservation">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<relationship name="pack_reservation_has_many_reservation" type="rel1n"
+	 src-col-pattern="{sc}_{st}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 col-indexes="3" constr-indexes="3"
+	 src-table="&quot;Branch&quot;.pack_reservation"
+	 dst-table="&quot;Branch&quot;.reservation"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="branches_has_many_tables" type="rel1n"
+	 src-col-pattern="{sc}_{st}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 col-indexes="1" constr-indexes="1"
+	 src-table="&quot;Company&quot;.branches"
+	 dst-table="&quot;Branch&quot;.tables"
+	 src-required="false" dst-required="false"/>
+
+<table name="taxes">
+	<schema name="&quot;Kitchen&quot;"/>
+	<position x="2020" y="521"/>
+	<column name="id">
+		<type name="bigserial"/>
+	</column>
+	<constraint name="key_taxes" type="pk-constr" factor="100" table="&quot;Kitchen&quot;.taxes">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<relationship name="branches_has_many_pack_reservation" type="rel1n"
+	 src-col-pattern="{sc}_{st}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 col-indexes="7" constr-indexes="1"
+	 src-table="&quot;Company&quot;.branches"
+	 dst-table="&quot;Branch&quot;.pack_reservation"
+	 src-required="false" dst-required="false"/>
+
+<table name="product_category">
+	<schema name="&quot;Kitchen&quot;"/>
+	<position x="2022" y="659"/>
+	<column name="id">
+		<type name="bigserial"/>
+	</column>
+	<column name="name" not-null="true">
+		<type name="varchar" length="100"/>
+	</column>
+	<column name="description">
+		<type name="text"/>
+	</column>
+	<constraint name="key_product_category" type="pk-constr" factor="100" table="&quot;Kitchen&quot;.product_category">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="product_department">
+	<schema name="&quot;Kitchen&quot;"/>
+	<position x="2021" y="570"/>
+	<column name="id">
+		<type name="bigserial"/>
+	</column>
+	<column name="name" not-null="true">
+		<type name="varchar" length="100"/>
+	</column>
+	<column name="description">
+		<type name="text"/>
+	</column>
+	<constraint name="key_product_department" type="pk-constr" factor="100" table="&quot;Kitchen&quot;.product_department">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<relationship name="country_has_many_branches" type="rel1n"
+	 src-col-pattern="{sc}_{st}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 col-indexes="15" constr-indexes="2"
+	 src-table="&quot;Fud&quot;.country"
+	 dst-table="&quot;Company&quot;.branches"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="country_has_many_customers" type="rel1n"
+	 src-col-pattern="{sc}_{st}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 col-indexes="6" constr-indexes="3"
+	 src-table="&quot;Fud&quot;.country"
+	 dst-table="&quot;Company&quot;.customers"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="companies_has_many_product_category" type="rel1n"
+	 src-col-pattern="{sc}_{st}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 col-indexes="1" constr-indexes="1"
+	 src-table="&quot;User&quot;.companies"
+	 dst-table="&quot;Kitchen&quot;.product_category"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="companies_has_many_product_department" type="rel1n"
+	 src-col-pattern="{sc}_{st}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 col-indexes="1" constr-indexes="1"
+	 src-table="&quot;User&quot;.companies"
+	 dst-table="&quot;Kitchen&quot;.product_department"
+	 src-required="false" dst-required="false"/>
+
+<table name="managers">
+	<schema name="&quot;Branch&quot;"/>
+	<position x="885" y="16"/>
+	<column name="id" not-null="true">
+		<type name="bigserial"/>
+	</column>
+	<constraint name="key_managers" type="pk-constr" factor="10" table="&quot;Branch&quot;.managers">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<relationship name="branches_has_many_managers" type="rel1n"
+	 src-col-pattern="{sc}_{st}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 col-indexes="1" constr-indexes="1"
+	 src-table="&quot;Company&quot;.branches"
+	 dst-table="&quot;Branch&quot;.managers"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="employees_has_many_managers" type="rel1n"
+	 src-col-pattern="{sc}_{st}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 col-indexes="2" constr-indexes="2"
+	 src-table="&quot;Company&quot;.employees"
+	 dst-table="&quot;Branch&quot;.managers"
+	 src-required="false" dst-required="false"/>
+
+<table name="boxes">
+	<schema name="&quot;Branch&quot;"/>
+	<position x="884" y="104"/>
+	<column name="id" not-null="true">
+		<type name="bigserial"/>
+	</column>
+	<column name="num_box">
+		<type name="int2"/>
+	</column>
+	<column name="ip">
+		<type name="inet"/>
+	</column>
+	<constraint name="key_boxes" type="pk-constr" factor="10" table="&quot;Branch&quot;.boxes">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<relationship name="branches_has_many_boxes" type="rel1n"
+	 src-col-pattern="{sc}_{st}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 col-indexes="1" constr-indexes="1"
+	 src-table="&quot;Company&quot;.branches"
+	 dst-table="&quot;Branch&quot;.boxes"
+	 src-required="false" dst-required="false">
+	<label ref-type="name-label">
+		<position x="0" y="0"/>
+	</label>
+</relationship>
+
+<relationship name="products_dish_supplies_has_many_product_features" type="rel1n"
+	 src-col-pattern="{sc}_{st}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 col-indexes="1" constr-indexes="1"
+	 src-table="&quot;Kitchen&quot;.products_dish_supplies"
+	 dst-table="&quot;Kitchen&quot;.product_features"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="companies_has_many_product_features" type="rel1n"
+	 src-col-pattern="{sc}_{st}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 col-indexes="2" constr-indexes="2"
+	 src-table="&quot;User&quot;.companies"
+	 dst-table="&quot;Kitchen&quot;.product_features"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="branches_has_many_product_features" type="rel1n"
+	 src-col-pattern="{sc}_{st}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 col-indexes="3" constr-indexes="3"
+	 src-table="&quot;Company&quot;.branches"
+	 dst-table="&quot;Kitchen&quot;.product_features"
+	 src-required="false" dst-required="false"/>
+
+<table name="suppliers">
+	<schema name="&quot;Branch&quot;"/>
+	<position x="884" y="759"/>
+	<column name="id">
+		<type name="bigserial"/>
+	</column>
+	<constraint name="key_suppliers" type="pk-constr" factor="10" table="&quot;Branch&quot;.suppliers">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<relationship name="suppliers_has_many_product_features" type="rel1n"
+	 src-col-pattern="{sc}_{st}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 col-indexes="16" constr-indexes="4"
+	 src-table="&quot;Branch&quot;.suppliers"
+	 dst-table="&quot;Kitchen&quot;.product_features"
+	 src-required="false" dst-required="false"/>
+
+<table name="billing_information">
+	<schema name="&quot;Branch&quot;"/>
+	<position x="884" y="820"/>
+	<column name="id" not-null="true">
+		<type name="bigserial"/>
+	</column>
+	<column name="colagne">
+		<type name="text"/>
+	</column>
+	<column name="city">
+		<type name="text"/>
+	</column>
+	<column name="localizacion">
+		<type name="text"/>
+	</column>
+	<column name="state">
+		<type name="text"/>
+	</column>
+	<column name="rfc" not-null="true">
+		<type name="text"/>
+	</column>
+	<column name="curp" not-null="true">
+		<type name="text"/>
+	</column>
+	<column name="addres">
+		<type name="text"/>
+	</column>
+	<column name="num_ext">
+		<type name="varchar" length="8"/>
+	</column>
+	<column name="num_int">
+		<type name="varchar" length="8"/>
+	</column>
+	<column name="postal_code">
+		<type name="varchar" length="10"/>
+	</column>
+	<constraint name="key_billing_information" type="pk-constr" factor="10" table="&quot;Branch&quot;.billing_information">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<relationship name="billing_information_has_one_suppliers" type="rel11"
+	 src-col-pattern="{sc}_{st}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 col-indexes="1" constr-indexes="1,2"
+	 src-table="&quot;Branch&quot;.suppliers"
+	 dst-table="&quot;Branch&quot;.billing_information"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="country_has_many_billing_information" type="rel1n"
+	 src-col-pattern="{sc}_{st}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 col-indexes="12" constr-indexes="3"
+	 src-table="&quot;Fud&quot;.country"
+	 dst-table="&quot;Branch&quot;.billing_information"
+	 src-required="false" dst-required="false">
+	<label ref-type="dst-label">
+		<position x="0" y="0"/>
+	</label>
+</relationship>
+
+<table name="supplies">
+	<schema name="&quot;Kitchen&quot;"/>
+	<position x="1711" y="186"/>
+</table>
+
+<table name="dishes">
+	<schema name="&quot;Kitchen&quot;"/>
+	<position x="1711" y="131"/>
+</table>
+
+<table name="combos">
+	<schema name="&quot;Kitchen&quot;"/>
+	<position x="1726" y="453"/>
+</table>
+
+<table name="products">
+	<schema name="&quot;Kitchen&quot;"/>
+	<position x="1712" y="70"/>
+</table>
+
+<table name="screen">
+	<schema name="&quot;Kitchen&quot;"/>
+	<position x="1723" y="387"/>
+	<column name="ip">
+		<type name="inet"/>
+	</column>
+</table>
+
+<relationship name="products_dish_supplies_has_many_products" type="rel1n"
+	 src-col-pattern="{sc}_{st}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 col-indexes="0" constr-indexes="0"
+	 src-table="&quot;Kitchen&quot;.products_dish_supplies"
+	 dst-table="&quot;Kitchen&quot;.products"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="products_dish_supplies_has_many_dishes" type="rel1n"
+	 src-col-pattern="{sc}_{st}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 col-indexes="0" constr-indexes="0"
+	 src-table="&quot;Kitchen&quot;.products_dish_supplies"
+	 dst-table="&quot;Kitchen&quot;.dishes"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="products_dish_supplies_has_many_supplies" type="rel1n"
+	 src-col-pattern="{sc}_{st}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 col-indexes="0" constr-indexes="0"
+	 src-table="&quot;Kitchen&quot;.products_dish_supplies"
+	 dst-table="&quot;Kitchen&quot;.supplies"
+	 src-required="false" dst-required="false"/>
+
+</dbmodel>
