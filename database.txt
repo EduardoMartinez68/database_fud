@@ -1,0 +1,1035 @@
+-- Database generated with pgModeler (PostgreSQL Database Modeler).
+-- pgModeler  version: 0.7.0
+-- PostgreSQL version: 9.3
+-- Project Site: pgmodeler.com.br
+-- Model Author: ---
+
+SET check_function_bodies = false;
+-- ddl-end --
+
+
+-- Database creation must be done outside an multicommand file.
+-- These commands were put in this file only for convenience.
+-- -- object: new_database | type: DATABASE --
+-- -- DROP DATABASE new_database;
+-- CREATE DATABASE new_database
+-- ;
+-- -- ddl-end --
+-- 
+
+-- object: "Inventory" | type: SCHEMA --
+-- DROP SCHEMA "Inventory";
+CREATE SCHEMA "Inventory";
+CREATE SCHEMA "Fud";
+CREATE SCHEMA "Company";
+CREATE SCHEMA "User";
+CREATE SCHEMA "Branch";
+CREATE SCHEMA "Employee";
+CREATE SCHEMA "Customer";
+CREATE SCHEMA "Box";
+CREATE SCHEMA "Kitchen";
+CREATE SCHEMA "Settings";
+
+-- ddl-end --
+
+SET search_path TO pg_catalog,public,"Fud","Company","User","Branch","Employee","Customer","Box","Kitchen","Settings","Inventory";
+-- ddl-end --
+CREATE TABLE "Fud".session (
+    sid character varying(255) NOT NULL PRIMARY KEY,
+    sess json NOT NULL,
+    expire timestamp(6) without time zone
+);
+
+-- object: "Fud".users | type: TABLE --
+-- DROP TABLE "Fud".users;
+CREATE TABLE "Fud".users(
+	id bigserial,
+	photo text,
+	user_name varchar(200) NOT NULL,
+	email varchar(100) NOT NULL,
+	password text NOT NULL,
+	first_name varchar(30) NOT NULL,
+	second_name varchar(30),
+	last_name varchar(90) NOT NULL,
+	rol_user smallint,
+	id_packs_fud int2,
+	CONSTRAINT key_user PRIMARY KEY (id),
+	CONSTRAINT user_u UNIQUE (user_name),
+	CONSTRAINT key_email_user UNIQUE (email)
+
+);
+-- ddl-end --
+COMMENT ON COLUMN "Fud".users.rol_user IS '0--customer,1--emplooyes,2--manager,3---CEO';
+COMMENT ON COLUMN "Fud".users.id_packs_fud IS 'This is the pack that the user need 0-free (user) 1-pack1, 2-pack 2, 3-pack 3';
+-- ddl-end --
+
+-- object: "User".companies | type: TABLE --
+-- DROP TABLE "User".companies;
+CREATE TABLE "User".companies(
+	id bigserial,
+	id_users bigint,
+	path_logo text,
+	name varchar(30),
+	alias varchar(30),
+	description text,
+	representative text,
+	ceo text,
+	id_country bigint,
+	states text,
+	municipality text,
+	city text,
+	cologne text,
+	address varchar(50),
+	num_int varchar(5),
+	num_ext varchar(5),
+	postal_code varchar(30),
+	email varchar(100),
+	cell_phone varchar(20),
+	phone varchar(20),
+	CONSTRAINT key_company PRIMARY KEY (id)
+
+);
+-- ddl-end --
+-- object: users_fk | type: CONSTRAINT --
+-- ALTER TABLE "User".companies DROP CONSTRAINT users_fk;
+ALTER TABLE "User".companies ADD CONSTRAINT users_fk FOREIGN KEY (id_users)
+REFERENCES "Fud".users (id) MATCH FULL
+ON DELETE SET NULL ON UPDATE CASCADE;
+-- ddl-end --
+
+
+-- object: "Company".employees | type: TABLE --
+-- DROP TABLE "Company".employees;
+CREATE TABLE "Company".employees(
+	id bigserial,
+	id_companies bigint,
+	id_users bigint,
+	id_roles_employees bigint,
+	id_departments_employees bigint,
+	id_branches bigint,
+	CONSTRAINT key_employees PRIMARY KEY (id)
+
+);
+-- ddl-end --
+-- object: companies_fk | type: CONSTRAINT --
+-- ALTER TABLE "Company".employees DROP CONSTRAINT companies_fk;
+ALTER TABLE "Company".employees ADD CONSTRAINT companies_fk FOREIGN KEY (id_companies)
+REFERENCES "User".companies (id) MATCH FULL
+ON DELETE SET NULL ON UPDATE CASCADE;
+-- ddl-end --
+
+
+-- object: "Fud".packs_fud | type: TABLE --
+-- DROP TABLE "Fud".packs_fud;
+CREATE TABLE "Fud".packs_fud(
+	id int2,
+	CONSTRAINT key PRIMARY KEY (id)
+
+);
+INSERT INTO "Fud".packs_fud(id) VALUES (0); --usuario vista 
+INSERT INTO "Fud".packs_fud(id) VALUES (1); --paquete 1
+INSERT INTO "Fud".packs_fud(id) VALUES (2); --paquete 2
+INSERT INTO "Fud".packs_fud(id) VALUES (3); --paquete 3
+INSERT INTO "Fud".packs_fud(id) VALUES (4); --paquete regalo 1 mes
+-- ddl-end --
+COMMENT ON COLUMN "Fud".packs_fud.id IS 'This is the pack that the user need 0-free (user) 1-pack1, 2-pack 2, 3-pack 3';
+-- ddl-end --
+
+-- object: packs_fud_fk | type: CONSTRAINT --
+-- ALTER TABLE "Fud".users DROP CONSTRAINT packs_fud_fk;
+ALTER TABLE "Fud".users ADD CONSTRAINT packs_fud_fk FOREIGN KEY (id_packs_fud)
+REFERENCES "Fud".packs_fud (id) MATCH FULL
+ON DELETE SET NULL ON UPDATE CASCADE;
+-- ddl-end --
+
+
+-- object: "Kitchen".products_and_supplies | type: TABLE --
+-- DROP TABLE "Kitchen".products_and_supplies;
+CREATE TABLE "Kitchen".products_and_supplies(
+	id bigserial NOT NULL,
+	id_companies bigint,
+	img text,
+	barcode varchar(300) NOT NULL,
+	name varchar(60) NOT NULL,
+	description text,
+	use_inventory boolean,
+	CONSTRAINT key_product PRIMARY KEY (id)
+
+);
+-- ddl-end --
+-- object: companies_fk | type: CONSTRAINT --
+-- ALTER TABLE "Kitchen".products_and_supplies DROP CONSTRAINT companies_fk;
+ALTER TABLE "Kitchen".products_and_supplies ADD CONSTRAINT companies_fk FOREIGN KEY (id_companies)
+REFERENCES "User".companies (id) MATCH FULL
+ON DELETE SET NULL ON UPDATE CASCADE;
+-- ddl-end --
+
+
+-- object: users_fk | type: CONSTRAINT --
+-- ALTER TABLE "Company".employees DROP CONSTRAINT users_fk;
+ALTER TABLE "Company".employees ADD CONSTRAINT users_fk FOREIGN KEY (id_users)
+REFERENCES "Fud".users (id) MATCH FULL
+ON DELETE SET NULL ON UPDATE CASCADE;
+-- ddl-end --
+
+
+-- object: employees_uq | type: CONSTRAINT --
+-- ALTER TABLE "Company".employees DROP CONSTRAINT employees_uq;
+ALTER TABLE "Company".employees ADD CONSTRAINT employees_uq UNIQUE (id_users);
+-- ddl-end --
+
+
+-- object: "Employee".roles_employees | type: TABLE --
+-- DROP TABLE "Employee".roles_employees;
+CREATE TABLE "Employee".roles_employees(
+	id bigserial,
+	id_companies bigint,
+	name varchar(30) NOT NULL,
+	description text,
+	commissions double precision NOT NULL,
+	type_of_salary smallint,
+	salary double precision,
+	discount_for_product double precision,
+	p1 boolean,
+	p2 boolean,
+	p3 boolean,
+	p4 boolean,
+	p5 boolean,
+	p6 boolean,
+	p7 boolean,
+	p8 boolean,
+	p9 boolean,
+	p11 boolean,
+	p12 boolean,
+	p13 boolean,
+	p14 boolean,
+	p15 boolean,
+	p16 boolean,
+	p17 boolean,
+	p18 boolean,
+	p19 boolean,
+	CONSTRAINT key_roles PRIMARY KEY (id)
+
+);
+-- ddl-end --
+-- object: roles_employees_fk | type: CONSTRAINT --
+-- ALTER TABLE "Company".employees DROP CONSTRAINT roles_employees_fk;
+ALTER TABLE "Company".employees ADD CONSTRAINT roles_employees_fk FOREIGN KEY (id_roles_employees)
+REFERENCES "Employee".roles_employees (id) MATCH FULL
+ON DELETE SET NULL ON UPDATE CASCADE;
+-- ddl-end --
+
+
+-- object: companies_fk | type: CONSTRAINT --
+-- ALTER TABLE "Employee".roles_employees DROP CONSTRAINT companies_fk;
+ALTER TABLE "Employee".roles_employees ADD CONSTRAINT companies_fk FOREIGN KEY (id_companies)
+REFERENCES "User".companies (id) MATCH FULL
+ON DELETE SET NULL ON UPDATE CASCADE;
+-- ddl-end --
+
+
+-- object: "Employee".departments_employees | type: TABLE --
+-- DROP TABLE "Employee".departments_employees;
+CREATE TABLE "Employee".departments_employees(
+	id bigserial,
+	id_companies bigint,
+	description text,
+	name varchar(100) NOT NULL,
+	CONSTRAINT key_areas PRIMARY KEY (id)
+
+);
+-- ddl-end --
+-- object: companies_fk | type: CONSTRAINT --
+-- ALTER TABLE "Employee".departments_employees DROP CONSTRAINT companies_fk;
+ALTER TABLE "Employee".departments_employees ADD CONSTRAINT companies_fk FOREIGN KEY (id_companies)
+REFERENCES "User".companies (id) MATCH FULL
+ON DELETE SET NULL ON UPDATE CASCADE;
+-- ddl-end --
+
+
+-- object: departments_employees_fk | type: CONSTRAINT --
+-- ALTER TABLE "Company".employees DROP CONSTRAINT departments_employees_fk;
+ALTER TABLE "Company".employees ADD CONSTRAINT departments_employees_fk FOREIGN KEY (id_departments_employees)
+REFERENCES "Employee".departments_employees (id) MATCH FULL
+ON DELETE SET NULL ON UPDATE CASCADE;
+-- ddl-end --
+
+
+-- object: "Company".customers | type: TABLE --
+-- DROP TABLE "Company".customers;
+CREATE TABLE "Company".customers(
+	id bigserial NOT NULL,
+	id_companies bigint,
+	id_branches bigint,
+	first_name varchar(50) NOT NULL,
+	second_name varchar(50),
+	last_name varchar(300),
+	id_country bigint,
+	states text,
+	municipality text,
+	city text,
+	cologne text,
+	address text,
+	num_ext varchar(8),
+	num_int varchar(8),
+	postal_code varchar(10),
+	email text,
+	phone varchar(20),
+	cell_phone varchar(20),
+	points smallint,
+	birthday date,
+	CONSTRAINT key_customer PRIMARY KEY (id)
+
+);
+-- ddl-end --
+-- object: companies_fk | type: CONSTRAINT --
+-- ALTER TABLE "Company".customers DROP CONSTRAINT companies_fk;
+ALTER TABLE "Company".customers ADD CONSTRAINT companies_fk FOREIGN KEY (id_companies)
+REFERENCES "User".companies (id) MATCH FULL
+ON DELETE SET NULL ON UPDATE CASCADE;
+-- ddl-end --
+
+
+-- object: "Box".sales_history | type: TABLE --
+-- DROP TABLE "Box".sales_history;
+CREATE TABLE "Box".sales_history(
+	id bigserial,
+	id_companies bigint,
+	id_branches bigint,
+	id_employees bigint,
+	id_customers bigint,
+	sale_day date,
+	CONSTRAINT key_sales_history PRIMARY KEY (id)
+
+);
+-- ddl-end --
+-- object: customers_fk | type: CONSTRAINT --
+-- ALTER TABLE "Box".sales_history DROP CONSTRAINT customers_fk;
+ALTER TABLE "Box".sales_history ADD CONSTRAINT customers_fk FOREIGN KEY (id_customers)
+REFERENCES "Company".customers (id) MATCH FULL
+ON DELETE SET NULL ON UPDATE CASCADE;
+-- ddl-end --
+
+
+-- object: employees_fk | type: CONSTRAINT --
+-- ALTER TABLE "Box".sales_history DROP CONSTRAINT employees_fk;
+ALTER TABLE "Box".sales_history ADD CONSTRAINT employees_fk FOREIGN KEY (id_employees)
+REFERENCES "Company".employees (id) MATCH FULL
+ON DELETE SET NULL ON UPDATE CASCADE;
+-- ddl-end --
+
+
+-- object: "Company".branches | type: TABLE --
+-- DROP TABLE "Company".branches;
+CREATE TABLE "Company".branches(
+	id bigserial NOT NULL,
+	id_companies bigint,
+	name_branch varchar(60) NOT NULL,
+	alias varchar(30) NOT NULL,
+	representative text,
+	id_country bigint,
+	state text NOT NULL,
+	municipality text NOT NULL,
+	city text NOT NULL,
+	cologne text NOT NULL,
+	address varchar(40),
+	num_ext varchar(8),
+	num_int varchar(8),
+	postal_code varchar(10) NOT NULL,
+	email text NOT NULL,
+	cell_phone varchar(24),
+	phone varchar(20),
+	CONSTRAINT key_branches PRIMARY KEY (id)
+
+);
+-- ddl-end --
+-- object: companies_fk | type: CONSTRAINT --
+-- ALTER TABLE "Company".branches DROP CONSTRAINT companies_fk;
+ALTER TABLE "Company".branches ADD CONSTRAINT companies_fk FOREIGN KEY (id_companies)
+REFERENCES "User".companies (id) MATCH FULL
+ON DELETE SET NULL ON UPDATE CASCADE;
+-- ddl-end --
+
+
+-- object: branches_fk | type: CONSTRAINT --
+-- ALTER TABLE "Company".employees DROP CONSTRAINT branches_fk;
+ALTER TABLE "Company".employees ADD CONSTRAINT branches_fk FOREIGN KEY (id_branches)
+REFERENCES "Company".branches (id) MATCH FULL
+ON DELETE SET NULL ON UPDATE CASCADE;
+-- ddl-end --
+
+
+-- object: branches_fk | type: CONSTRAINT --
+-- ALTER TABLE "Company".customers DROP CONSTRAINT branches_fk;
+ALTER TABLE "Company".customers ADD CONSTRAINT branches_fk FOREIGN KEY (id_branches)
+REFERENCES "Company".branches (id) MATCH FULL
+ON DELETE SET NULL ON UPDATE CASCADE;
+-- ddl-end --
+
+
+-- object: branches_fk | type: CONSTRAINT --
+-- ALTER TABLE "Box".sales_history DROP CONSTRAINT branches_fk;
+ALTER TABLE "Box".sales_history ADD CONSTRAINT branches_fk FOREIGN KEY (id_branches)
+REFERENCES "Company".branches (id) MATCH FULL
+ON DELETE SET NULL ON UPDATE CASCADE;
+-- ddl-end --
+
+
+-- object: companies_fk | type: CONSTRAINT --
+-- ALTER TABLE "Box".sales_history DROP CONSTRAINT companies_fk;
+ALTER TABLE "Box".sales_history ADD CONSTRAINT companies_fk FOREIGN KEY (id_companies)
+REFERENCES "User".companies (id) MATCH FULL
+ON DELETE SET NULL ON UPDATE CASCADE;
+-- ddl-end --
+
+
+-- object: "Employee".schedules | type: TABLE --
+-- DROP TABLE "Employee".schedules;
+CREATE TABLE "Employee".schedules(
+	id bigserial,
+	id_branches bigint,
+	CONSTRAINT key PRIMARY KEY (id)
+
+);
+-- ddl-end --
+-- object: branches_fk | type: CONSTRAINT --
+-- ALTER TABLE "Employee".schedules DROP CONSTRAINT branches_fk;
+ALTER TABLE "Employee".schedules ADD CONSTRAINT branches_fk FOREIGN KEY (id_branches)
+REFERENCES "Company".branches (id) MATCH FULL
+ON DELETE SET NULL ON UPDATE CASCADE;
+-- ddl-end --
+
+
+-- object: "Inventory".dish_and_combo_features | type: TABLE --
+-- DROP TABLE "Inventory".dish_and_combo_features;
+CREATE TABLE "Inventory".dish_and_combo_features(
+	id bigserial NOT NULL,
+	id_companies bigint,
+	id_branches bigint,
+	id_dishes_and_combos bigint,
+	price_1 double precision NOT NULL,
+	revenue_1 double precision NOT NULL,
+	price_2 double precision,
+	revenue_2 double precision,
+	price_3 double precision,
+	revenue_3 double precision,
+	favorites boolean,
+	sat_key text,
+	purchase_unit varchar(12) NOT NULL,
+	existence double precision,
+	amount double precision NOT NULL,
+	product_cost double precision NOT NULL,
+	id_providers bigint,
+	CONSTRAINT key_dish_features PRIMARY KEY (id)
+
+);
+-- ddl-end --
+-- object: "Fud".country | type: TABLE --
+-- DROP TABLE "Fud".country;
+CREATE TABLE "Fud".country(
+	id bigserial,
+	name varchar(50),
+	CONSTRAINT key_country PRIMARY KEY (id)
+
+);
+-- ddl-end --
+-- object: country_fk | type: CONSTRAINT --
+-- ALTER TABLE "User".companies DROP CONSTRAINT country_fk;
+ALTER TABLE "User".companies ADD CONSTRAINT country_fk FOREIGN KEY (id_country)
+REFERENCES "Fud".country (id) MATCH FULL
+ON DELETE SET NULL ON UPDATE CASCADE;
+-- ddl-end --
+
+
+-- object: "Inventory".commanders | type: TABLE --
+-- DROP TABLE "Inventory".commanders;
+CREATE TABLE "Inventory".commanders(
+	id bigserial,
+	id_branches bigint,
+	id_employees bigint,
+	status integer,
+	comentary text,
+	commander_date timestamp,
+	CONSTRAINT key_commander PRIMARY KEY (id)
+
+);
+-- ddl-end --
+-- object: branches_fk | type: CONSTRAINT --
+-- ALTER TABLE "Inventory".commanders DROP CONSTRAINT branches_fk;
+ALTER TABLE "Inventory".commanders ADD CONSTRAINT branches_fk FOREIGN KEY (id_branches)
+REFERENCES "Company".branches (id) MATCH FULL
+ON DELETE SET NULL ON UPDATE CASCADE;
+-- ddl-end --
+
+
+-- object: "Branch".tables | type: TABLE --
+-- DROP TABLE "Branch".tables;
+CREATE TABLE "Branch".tables(
+	id bigserial,
+	id_branches bigint,
+	id_restaurant_area bigint,
+	name varchar(30),
+	table_number integer,
+	num_customers smallint DEFAULT 0,
+	CONSTRAINT key_table PRIMARY KEY (id)
+
+);
+-- ddl-end --
+-- object: employees_fk | type: CONSTRAINT --
+-- ALTER TABLE "Inventory".commanders DROP CONSTRAINT employees_fk;
+ALTER TABLE "Inventory".commanders ADD CONSTRAINT employees_fk FOREIGN KEY (id_employees)
+REFERENCES "Company".employees (id) MATCH FULL
+ON DELETE SET NULL ON UPDATE CASCADE;
+-- ddl-end --
+
+
+-- object: "Branch".reservation | type: TABLE --
+-- DROP TABLE "Branch".reservation;
+CREATE TABLE "Branch".reservation(
+	id bigserial,
+	id_branches bigint,
+	id_tables bigint,
+	id_pack_reservation bigint,
+	customer_name varchar(100),
+	customer_phone varchar(20),
+	customer_email text,
+	reservation_date date,
+	reservation_time timestamp,
+	reason text,
+	number_of_adult integer,
+	number_of_children integer,
+	commentary text,
+	status integer,
+	CONSTRAINT key_reservation PRIMARY KEY (id)
+
+);
+-- ddl-end --
+-- object: branches_fk | type: CONSTRAINT --
+-- ALTER TABLE "Branch".reservation DROP CONSTRAINT branches_fk;
+ALTER TABLE "Branch".reservation ADD CONSTRAINT branches_fk FOREIGN KEY (id_branches)
+REFERENCES "Company".branches (id) MATCH FULL
+ON DELETE SET NULL ON UPDATE CASCADE;
+-- ddl-end --
+
+
+-- object: tables_fk | type: CONSTRAINT --
+-- ALTER TABLE "Branch".reservation DROP CONSTRAINT tables_fk;
+ALTER TABLE "Branch".reservation ADD CONSTRAINT tables_fk FOREIGN KEY (id_tables)
+REFERENCES "Branch".tables (id) MATCH FULL
+ON DELETE SET NULL ON UPDATE CASCADE;
+-- ddl-end --
+
+
+-- object: "Branch".pack_reservation | type: TABLE --
+-- DROP TABLE "Branch".pack_reservation;
+CREATE TABLE "Branch".pack_reservation(
+	id bigserial NOT NULL,
+	name varchar(30) NOT NULL,
+	description text,
+	number_of_adult integer,
+	number_of_children integer,
+	price_for_children double precision,
+	price_for_adult double precision,
+	id_branches bigint,
+	CONSTRAINT key_pack_reservation PRIMARY KEY (id)
+
+);
+-- ddl-end --
+-- object: pack_reservation_fk | type: CONSTRAINT --
+-- ALTER TABLE "Branch".reservation DROP CONSTRAINT pack_reservation_fk;
+ALTER TABLE "Branch".reservation ADD CONSTRAINT pack_reservation_fk FOREIGN KEY (id_pack_reservation)
+REFERENCES "Branch".pack_reservation (id) MATCH FULL
+ON DELETE SET NULL ON UPDATE CASCADE;
+-- ddl-end --
+
+
+-- object: branches_fk | type: CONSTRAINT --
+-- ALTER TABLE "Branch".tables DROP CONSTRAINT branches_fk;
+ALTER TABLE "Branch".tables ADD CONSTRAINT branches_fk FOREIGN KEY (id_branches)
+REFERENCES "Company".branches (id) MATCH FULL
+ON DELETE SET NULL ON UPDATE CASCADE;
+-- ddl-end --
+
+
+-- object: "Inventory".taxes | type: TABLE --
+-- DROP TABLE "Inventory".taxes;
+CREATE TABLE "Inventory".taxes(
+	id bigserial,
+	name varchar(100),
+	price_taxe double precision,
+	local_taxe boolean,
+	type_taxe integer,
+	accounting_account text,
+	CONSTRAINT key_taxes PRIMARY KEY (id)
+
+);
+-- ddl-end --
+-- object: branches_fk | type: CONSTRAINT --
+-- ALTER TABLE "Branch".pack_reservation DROP CONSTRAINT branches_fk;
+ALTER TABLE "Branch".pack_reservation ADD CONSTRAINT branches_fk FOREIGN KEY (id_branches)
+REFERENCES "Company".branches (id) MATCH FULL
+ON DELETE SET NULL ON UPDATE CASCADE;
+-- ddl-end --
+
+
+-- object: "Kitchen".product_category | type: TABLE --
+-- DROP TABLE "Kitchen".product_category;
+CREATE TABLE "Kitchen".product_category(
+	id bigserial,
+	id_companies bigint,
+	name varchar(100) NOT NULL,
+	description text,
+	CONSTRAINT key_product_category PRIMARY KEY (id)
+
+);
+-- ddl-end --
+-- object: "Kitchen".product_department | type: TABLE --
+-- DROP TABLE "Kitchen".product_department;
+CREATE TABLE "Kitchen".product_department(
+	id bigserial,
+	id_companies bigint,
+	name varchar(100) NOT NULL,
+	description text,
+	CONSTRAINT key_product_department PRIMARY KEY (id)
+
+);
+-- ddl-end --
+-- object: country_fk | type: CONSTRAINT --
+-- ALTER TABLE "Company".branches DROP CONSTRAINT country_fk;
+ALTER TABLE "Company".branches ADD CONSTRAINT country_fk FOREIGN KEY (id_country)
+REFERENCES "Fud".country (id) MATCH FULL
+ON DELETE SET NULL ON UPDATE CASCADE;
+-- ddl-end --
+
+
+-- object: country_fk | type: CONSTRAINT --
+-- ALTER TABLE "Company".customers DROP CONSTRAINT country_fk;
+ALTER TABLE "Company".customers ADD CONSTRAINT country_fk FOREIGN KEY (id_country)
+REFERENCES "Fud".country (id) MATCH FULL
+ON DELETE SET NULL ON UPDATE CASCADE;
+-- ddl-end --
+
+
+-- object: companies_fk | type: CONSTRAINT --
+-- ALTER TABLE "Kitchen".product_category DROP CONSTRAINT companies_fk;
+ALTER TABLE "Kitchen".product_category ADD CONSTRAINT companies_fk FOREIGN KEY (id_companies)
+REFERENCES "User".companies (id) MATCH FULL
+ON DELETE SET NULL ON UPDATE CASCADE;
+-- ddl-end --
+
+
+-- object: companies_fk | type: CONSTRAINT --
+-- ALTER TABLE "Kitchen".product_department DROP CONSTRAINT companies_fk;
+ALTER TABLE "Kitchen".product_department ADD CONSTRAINT companies_fk FOREIGN KEY (id_companies)
+REFERENCES "User".companies (id) MATCH FULL
+ON DELETE SET NULL ON UPDATE CASCADE;
+-- ddl-end --
+
+
+-- object: "Branch".managers | type: TABLE --
+-- DROP TABLE "Branch".managers;
+CREATE TABLE "Branch".managers(
+	id bigserial NOT NULL,
+	id_branches bigint,
+	id_employees bigint,
+	CONSTRAINT key_managers PRIMARY KEY (id)
+
+);
+-- ddl-end --
+-- object: branches_fk | type: CONSTRAINT --
+-- ALTER TABLE "Branch".managers DROP CONSTRAINT branches_fk;
+ALTER TABLE "Branch".managers ADD CONSTRAINT branches_fk FOREIGN KEY (id_branches)
+REFERENCES "Company".branches (id) MATCH FULL
+ON DELETE SET NULL ON UPDATE CASCADE;
+-- ddl-end --
+
+
+-- object: employees_fk | type: CONSTRAINT --
+-- ALTER TABLE "Branch".managers DROP CONSTRAINT employees_fk;
+ALTER TABLE "Branch".managers ADD CONSTRAINT employees_fk FOREIGN KEY (id_employees)
+REFERENCES "Company".employees (id) MATCH FULL
+ON DELETE SET NULL ON UPDATE CASCADE;
+-- ddl-end --
+
+
+-- object: "Branch".boxes | type: TABLE --
+-- DROP TABLE "Branch".boxes;
+CREATE TABLE "Branch".boxes(
+	id bigserial NOT NULL,
+	id_branches bigint,
+	num_box int2,
+	ip_printer inet,
+	ip inet,
+	CONSTRAINT key_boxes PRIMARY KEY (id)
+
+);
+-- ddl-end --
+-- object: branches_fk | type: CONSTRAINT --
+-- ALTER TABLE "Branch".boxes DROP CONSTRAINT branches_fk;
+ALTER TABLE "Branch".boxes ADD CONSTRAINT branches_fk FOREIGN KEY (id_branches)
+REFERENCES "Company".branches (id) MATCH FULL
+ON DELETE SET NULL ON UPDATE CASCADE;
+-- ddl-end --
+
+
+-- object: companies_fk | type: CONSTRAINT --
+-- ALTER TABLE "Inventory".dish_and_combo_features DROP CONSTRAINT companies_fk;
+ALTER TABLE "Inventory".dish_and_combo_features ADD CONSTRAINT companies_fk FOREIGN KEY (id_companies)
+REFERENCES "User".companies (id) MATCH FULL
+ON DELETE SET NULL ON UPDATE CASCADE;
+-- ddl-end --
+
+
+-- object: branches_fk | type: CONSTRAINT --
+-- ALTER TABLE "Inventory".dish_and_combo_features DROP CONSTRAINT branches_fk;
+ALTER TABLE "Inventory".dish_and_combo_features ADD CONSTRAINT branches_fk FOREIGN KEY (id_branches)
+REFERENCES "Company".branches (id) MATCH FULL
+ON DELETE SET NULL ON UPDATE CASCADE;
+-- ddl-end --
+
+
+-- object: "Branch".providers | type: TABLE --
+-- DROP TABLE "Branch".providers;
+CREATE TABLE "Branch".providers(
+	id bigserial,
+	id_branches bigint,
+	name varchar(200),
+	alias varchar(200),
+	representative varchar(200),
+	cell_phone varchar(15),
+	phone varchar(15),
+	email text,
+	credit_limit double precision,
+	credit_days smallint,
+	comment text,
+	CONSTRAINT key_suppliers_branch PRIMARY KEY (id)
+
+);
+-- ddl-end --
+-- object: providers_fk | type: CONSTRAINT --
+-- ALTER TABLE "Inventory".dish_and_combo_features DROP CONSTRAINT providers_fk;
+ALTER TABLE "Inventory".dish_and_combo_features ADD CONSTRAINT providers_fk FOREIGN KEY (id_providers)
+REFERENCES "Branch".providers (id) MATCH FULL
+ON DELETE SET NULL ON UPDATE CASCADE;
+-- ddl-end --
+
+
+-- object: "Branch".billing_information | type: TABLE --
+-- DROP TABLE "Branch".billing_information;
+CREATE TABLE "Branch".billing_information(
+	id bigserial NOT NULL,
+	id_providers bigint,
+	id_country bigint,
+	state text,
+	municipality text,
+	city text,
+	addres text,
+	num_ext varchar(8),
+	num_int varchar(8),
+	postal_code varchar(10),
+	rfc text NOT NULL,
+	curp text NOT NULL,
+	CONSTRAINT key_billing_information PRIMARY KEY (id)
+
+);
+-- ddl-end --
+-- object: providers_fk | type: CONSTRAINT --
+-- ALTER TABLE "Branch".billing_information DROP CONSTRAINT providers_fk;
+ALTER TABLE "Branch".billing_information ADD CONSTRAINT providers_fk FOREIGN KEY (id_providers)
+REFERENCES "Branch".providers (id) MATCH FULL
+ON DELETE SET NULL ON UPDATE CASCADE;
+-- ddl-end --
+
+
+-- object: billing_information_uq | type: CONSTRAINT --
+-- ALTER TABLE "Branch".billing_information DROP CONSTRAINT billing_information_uq;
+ALTER TABLE "Branch".billing_information ADD CONSTRAINT billing_information_uq UNIQUE (id_providers);
+-- ddl-end --
+
+
+-- object: country_fk | type: CONSTRAINT --
+-- ALTER TABLE "Branch".billing_information DROP CONSTRAINT country_fk;
+ALTER TABLE "Branch".billing_information ADD CONSTRAINT country_fk FOREIGN KEY (id_country)
+REFERENCES "Fud".country (id) MATCH FULL
+ON DELETE SET NULL ON UPDATE CASCADE;
+-- ddl-end --
+
+
+-- object: "Kitchen".dishes_and_combos | type: TABLE --
+-- DROP TABLE "Kitchen".dishes_and_combos;
+CREATE TABLE "Kitchen".dishes_and_combos(
+	id bigint,
+	id_companies bigint,
+	img text,
+	name varchar(100),
+	description text,
+	barcode text,
+	id_product_department bigint,
+	id_product_category bigint,
+	CONSTRAINT key_dishes_and_combos PRIMARY KEY (id)
+
+);
+-- ddl-end --
+-- object: "Kitchen".screen | type: TABLE --
+-- DROP TABLE "Kitchen".screen;
+CREATE TABLE "Kitchen".screen(
+	ip inet NOT NULL,
+	id_branches bigint,
+	CONSTRAINT id_screen PRIMARY KEY (ip)
+
+);
+-- ddl-end --
+-- object: "Branch".restaurant_area | type: TABLE --
+-- DROP TABLE "Branch".restaurant_area;
+CREATE TABLE "Branch".restaurant_area(
+	id bigserial,
+	id_branches bigint,
+	name varchar(30),
+	description text,
+	floor integer,
+	CONSTRAINT key_restaurant_area PRIMARY KEY (id)
+
+);
+-- ddl-end --
+-- object: branches_fk | type: CONSTRAINT --
+-- ALTER TABLE "Branch".restaurant_area DROP CONSTRAINT branches_fk;
+ALTER TABLE "Branch".restaurant_area ADD CONSTRAINT branches_fk FOREIGN KEY (id_branches)
+REFERENCES "Company".branches (id) MATCH FULL
+ON DELETE SET NULL ON UPDATE CASCADE;
+-- ddl-end --
+
+
+-- object: restaurant_area_fk | type: CONSTRAINT --
+-- ALTER TABLE "Branch".tables DROP CONSTRAINT restaurant_area_fk;
+ALTER TABLE "Branch".tables ADD CONSTRAINT restaurant_area_fk FOREIGN KEY (id_restaurant_area)
+REFERENCES "Branch".restaurant_area (id) MATCH FULL
+ON DELETE SET NULL ON UPDATE CASCADE;
+-- ddl-end --
+
+
+-- object: "Box".boxes_history | type: TABLE --
+-- DROP TABLE "Box".boxes_history;
+CREATE TABLE "Box".boxes_history(
+	id bigint,
+	initial_date timestamp,
+	finish_date timestamp,
+	id_branches bigint,
+	id_employees bigint,
+	id_boxes bigint,
+	CONSTRAINT key_boxes_history PRIMARY KEY (id)
+
+);
+-- ddl-end --
+-- object: boxes_fk | type: CONSTRAINT --
+-- ALTER TABLE "Box".boxes_history DROP CONSTRAINT boxes_fk;
+ALTER TABLE "Box".boxes_history ADD CONSTRAINT boxes_fk FOREIGN KEY (id_boxes)
+REFERENCES "Branch".boxes (id) MATCH FULL
+ON DELETE SET NULL ON UPDATE CASCADE;
+-- ddl-end --
+
+
+-- object: employees_fk | type: CONSTRAINT --
+-- ALTER TABLE "Box".boxes_history DROP CONSTRAINT employees_fk;
+ALTER TABLE "Box".boxes_history ADD CONSTRAINT employees_fk FOREIGN KEY (id_employees)
+REFERENCES "Company".employees (id) MATCH FULL
+ON DELETE SET NULL ON UPDATE CASCADE;
+-- ddl-end --
+
+
+-- object: branches_fk | type: CONSTRAINT --
+-- ALTER TABLE "Box".boxes_history DROP CONSTRAINT branches_fk;
+ALTER TABLE "Box".boxes_history ADD CONSTRAINT branches_fk FOREIGN KEY (id_branches)
+REFERENCES "Company".branches (id) MATCH FULL
+ON DELETE SET NULL ON UPDATE CASCADE;
+-- ddl-end --
+
+
+-- object: "Box".movement_history | type: TABLE --
+-- DROP TABLE "Box".movement_history;
+CREATE TABLE "Box".movement_history(
+	id bigint,
+	id_branches bigint,
+	id_boxes bigint,
+	id_employees bigint,
+	move double precision,
+	comment text,
+	CONSTRAINT key_movement_history PRIMARY KEY (id)
+
+);
+-- ddl-end --
+-- object: branches_fk | type: CONSTRAINT --
+-- ALTER TABLE "Box".movement_history DROP CONSTRAINT branches_fk;
+ALTER TABLE "Box".movement_history ADD CONSTRAINT branches_fk FOREIGN KEY (id_branches)
+REFERENCES "Company".branches (id) MATCH FULL
+ON DELETE SET NULL ON UPDATE CASCADE;
+-- ddl-end --
+
+
+-- object: boxes_fk | type: CONSTRAINT --
+-- ALTER TABLE "Box".movement_history DROP CONSTRAINT boxes_fk;
+ALTER TABLE "Box".movement_history ADD CONSTRAINT boxes_fk FOREIGN KEY (id_boxes)
+REFERENCES "Branch".boxes (id) MATCH FULL
+ON DELETE SET NULL ON UPDATE CASCADE;
+-- ddl-end --
+
+
+-- object: employees_fk | type: CONSTRAINT --
+-- ALTER TABLE "Box".movement_history DROP CONSTRAINT employees_fk;
+ALTER TABLE "Box".movement_history ADD CONSTRAINT employees_fk FOREIGN KEY (id_employees)
+REFERENCES "Company".employees (id) MATCH FULL
+ON DELETE SET NULL ON UPDATE CASCADE;
+-- ddl-end --
+
+
+-- object: product_department_fk | type: CONSTRAINT --
+-- ALTER TABLE "Kitchen".dishes_and_combos DROP CONSTRAINT product_department_fk;
+ALTER TABLE "Kitchen".dishes_and_combos ADD CONSTRAINT product_department_fk FOREIGN KEY (id_product_department)
+REFERENCES "Kitchen".product_department (id) MATCH FULL
+ON DELETE SET NULL ON UPDATE CASCADE;
+-- ddl-end --
+
+
+-- object: product_category_fk | type: CONSTRAINT --
+-- ALTER TABLE "Kitchen".dishes_and_combos DROP CONSTRAINT product_category_fk;
+ALTER TABLE "Kitchen".dishes_and_combos ADD CONSTRAINT product_category_fk FOREIGN KEY (id_product_category)
+REFERENCES "Kitchen".product_category (id) MATCH FULL
+ON DELETE SET NULL ON UPDATE CASCADE;
+-- ddl-end --
+
+
+-- object: "Settings".company | type: TABLE --
+-- DROP TABLE "Settings".company;
+CREATE TABLE "Settings".company(
+	color_company smallint
+);
+-- ddl-end --
+-- object: "Settings".branch | type: TABLE --
+-- DROP TABLE "Settings".branch;
+CREATE TABLE "Settings".branch(
+	id bigint,
+	CONSTRAINT key_setting_branch PRIMARY KEY (id)
+
+);
+-- ddl-end --
+-- object: "Inventory".table_taxes | type: TABLE --
+-- DROP TABLE "Inventory".table_taxes;
+CREATE TABLE "Inventory".table_taxes(
+	id bigserial,
+	id_taxes bigint,
+	id_dishes_and_combos bigint,
+	CONSTRAINT key_table_taxes PRIMARY KEY (id)
+
+);
+-- ddl-end --
+-- object: taxes_fk | type: CONSTRAINT --
+-- ALTER TABLE "Inventory".table_taxes DROP CONSTRAINT taxes_fk;
+ALTER TABLE "Inventory".table_taxes ADD CONSTRAINT taxes_fk FOREIGN KEY (id_taxes)
+REFERENCES "Inventory".taxes (id) MATCH FULL
+ON DELETE SET NULL ON UPDATE CASCADE;
+-- ddl-end --
+
+
+-- object: dishes_and_combos_fk | type: CONSTRAINT --
+-- ALTER TABLE "Inventory".table_taxes DROP CONSTRAINT dishes_and_combos_fk;
+ALTER TABLE "Inventory".table_taxes ADD CONSTRAINT dishes_and_combos_fk FOREIGN KEY (id_dishes_and_combos)
+REFERENCES "Kitchen".dishes_and_combos (id) MATCH FULL
+ON DELETE SET NULL ON UPDATE CASCADE;
+-- ddl-end --
+
+
+-- object: dishes_and_combos_fk | type: CONSTRAINT --
+-- ALTER TABLE "Inventory".dish_and_combo_features DROP CONSTRAINT dishes_and_combos_fk;
+ALTER TABLE "Inventory".dish_and_combo_features ADD CONSTRAINT dishes_and_combos_fk FOREIGN KEY (id_dishes_and_combos)
+REFERENCES "Kitchen".dishes_and_combos (id) MATCH FULL
+ON DELETE SET NULL ON UPDATE CASCADE;
+-- ddl-end --
+
+
+-- object: companies_fk | type: CONSTRAINT --
+-- ALTER TABLE "Kitchen".dishes_and_combos DROP CONSTRAINT companies_fk;
+ALTER TABLE "Kitchen".dishes_and_combos ADD CONSTRAINT companies_fk FOREIGN KEY (id_companies)
+REFERENCES "User".companies (id) MATCH FULL
+ON DELETE SET NULL ON UPDATE CASCADE;
+-- ddl-end --
+
+
+-- object: "Inventory".product_and_suppiles_features | type: TABLE --
+-- DROP TABLE "Inventory".product_and_suppiles_features;
+CREATE TABLE "Inventory".product_and_suppiles_features(
+	id bigserial,
+	id_branches bigint,
+	sale_unity integer,
+	sale_price double precision,
+	max_inventary double precision,
+	minimum_inventory double precision,
+	existence double precision,
+	purchase_amount double precision,
+	purchase_unity integer,
+	purchase_price double precision,
+	sale_amount double precision,
+	id_products_and_supplies bigint,
+	CONSTRAINT key_product_features2 PRIMARY KEY (id)
+
+);
+-- ddl-end --
+-- object: products_and_supplies_fk | type: CONSTRAINT --
+-- ALTER TABLE "Inventory".product_and_suppiles_features DROP CONSTRAINT products_and_supplies_fk;
+ALTER TABLE "Inventory".product_and_suppiles_features ADD CONSTRAINT products_and_supplies_fk FOREIGN KEY (id_products_and_supplies)
+REFERENCES "Kitchen".products_and_supplies (id) MATCH FULL
+ON DELETE SET NULL ON UPDATE CASCADE;
+-- ddl-end --
+
+
+-- object: "Inventory".table_supplies_dish | type: TABLE --
+-- DROP TABLE "Inventory".table_supplies_dish;
+CREATE TABLE "Inventory".table_supplies_dish(
+	id bigserial,
+	id_dish_and_combo_features bigint,
+	id_product_and_suppiles_features bigint,
+	amount double precision,
+	unity integer,
+	CONSTRAINT key_table_supplies_dish PRIMARY KEY (id)
+
+);
+-- ddl-end --
+-- object: product_and_suppiles_features_fk | type: CONSTRAINT --
+-- ALTER TABLE "Inventory".table_supplies_dish DROP CONSTRAINT product_and_suppiles_features_fk;
+ALTER TABLE "Inventory".table_supplies_dish ADD CONSTRAINT product_and_suppiles_features_fk FOREIGN KEY (id_product_and_suppiles_features)
+REFERENCES "Inventory".product_and_suppiles_features (id) MATCH FULL
+ON DELETE SET NULL ON UPDATE CASCADE;
+-- ddl-end --
+
+
+-- object: dish_and_combo_features_fk | type: CONSTRAINT --
+-- ALTER TABLE "Inventory".table_supplies_dish DROP CONSTRAINT dish_and_combo_features_fk;
+ALTER TABLE "Inventory".table_supplies_dish ADD CONSTRAINT dish_and_combo_features_fk FOREIGN KEY (id_dish_and_combo_features)
+REFERENCES "Inventory".dish_and_combo_features (id) MATCH FULL
+ON DELETE SET NULL ON UPDATE CASCADE;
+-- ddl-end --
+
+
+-- object: branches_fk | type: CONSTRAINT --
+-- ALTER TABLE "Branch".providers DROP CONSTRAINT branches_fk;
+ALTER TABLE "Branch".providers ADD CONSTRAINT branches_fk FOREIGN KEY (id_branches)
+REFERENCES "Company".branches (id) MATCH FULL
+ON DELETE SET NULL ON UPDATE CASCADE;
+-- ddl-end --
+
+
+-- object: branches_fk | type: CONSTRAINT --
+-- ALTER TABLE "Kitchen".screen DROP CONSTRAINT branches_fk;
+ALTER TABLE "Kitchen".screen ADD CONSTRAINT branches_fk FOREIGN KEY (id_branches)
+REFERENCES "Company".branches (id) MATCH FULL
+ON DELETE SET NULL ON UPDATE CASCADE;
+-- ddl-end --
+
+
+-- object: branches_fk | type: CONSTRAINT --
+-- ALTER TABLE "Inventory".product_and_suppiles_features DROP CONSTRAINT branches_fk;
+ALTER TABLE "Inventory".product_and_suppiles_features ADD CONSTRAINT branches_fk FOREIGN KEY (id_branches)
+REFERENCES "Company".branches (id) MATCH FULL
+ON DELETE SET NULL ON UPDATE CASCADE;
+-- ddl-end --
+
+
+
