@@ -1030,6 +1030,33 @@ ALTER TABLE "Inventory".product_and_suppiles_features ADD CONSTRAINT branches_fk
 REFERENCES "Company".branches (id) MATCH FULL
 ON DELETE SET NULL ON UPDATE CASCADE;
 -- ddl-end --
+-- Database: Fud
 
+-- DROP DATABASE IF EXISTS "Fud";
+
+-- object: "Kitchen".table_supplies_combo | type: TABLE --
+-- DROP TABLE "Kitchen".table_supplies_combo;
+CREATE TABLE "Kitchen".table_supplies_combo(
+	id bigserial,
+	id_dishes_and_combos bigint,
+	id_products_and_supplies bigint,
+	amount double precision,
+	unity integer
+);
+-- ddl-end --
+-- object: dishes_and_combos_fk | type: CONSTRAINT --
+-- ALTER TABLE "Kitchen".table_supplies_combo DROP CONSTRAINT dishes_and_combos_fk;
+ALTER TABLE "Kitchen".table_supplies_combo ADD CONSTRAINT dishes_and_combos_fk FOREIGN KEY (id_dishes_and_combos)
+REFERENCES "Kitchen".dishes_and_combos (id) MATCH FULL
+ON DELETE SET NULL ON UPDATE CASCADE;
+-- ddl-end --
+
+
+-- object: products_and_supplies_fk | type: CONSTRAINT --
+-- ALTER TABLE "Kitchen".table_supplies_combo DROP CONSTRAINT products_and_supplies_fk;
+ALTER TABLE "Kitchen".table_supplies_combo ADD CONSTRAINT products_and_supplies_fk FOREIGN KEY (id_products_and_supplies) 
+REFERENCES "Kitchen".products_and_supplies (id) MATCH FULL
+ON DELETE SET NULL ON UPDATE CASCADE;
+-- ddl-end --
 
 
