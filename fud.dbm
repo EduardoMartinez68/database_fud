@@ -388,7 +388,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<column name="id" not-null="true">
 		<type name="bigserial"/>
 	</column>
-	<column name="states">
+	<column name="states" not-null="true">
 		<type name="text"/>
 	</column>
 	<column name="first_name" not-null="true">
@@ -400,13 +400,13 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<column name="num_ext">
 		<type name="varchar" length="8"/>
 	</column>
-	<column name="email">
+	<column name="email" not-null="true">
 		<type name="text"/>
 	</column>
 	<column name="phone">
 		<type name="varchar" length="20"/>
 	</column>
-	<column name="street">
+	<column name="street" not-null="true">
 		<type name="text"/>
 	</column>
 	<column name="points">
@@ -421,7 +421,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<column name="second_name">
 		<type name="varchar" length="50"/>
 	</column>
-	<column name="city">
+	<column name="city" not-null="true">
 		<type name="text"/>
 	</column>
 	<column name="cell_phone">
@@ -898,7 +898,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	 src-col-pattern="{sc}_{st}"
 	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
 	 src-fk-pattern="{st}_fk"
-	 col-indexes="6" constr-indexes="3"
+	 col-indexes="6" constr-indexes="2"
 	 src-table="&quot;Fud&quot;.country"
 	 dst-table="&quot;Company&quot;.customers"
 	 src-required="false" dst-required="false"/>
