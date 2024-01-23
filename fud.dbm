@@ -85,9 +85,6 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<column name="id">
 		<type name="bigserial"/>
 	</column>
-	<column name="cell_phone">
-		<type name="varchar" length="20"/>
-	</column>
 	<column name="path_logo">
 		<type name="text"/>
 	</column>
@@ -105,9 +102,6 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	</column>
 	<column name="ceo">
 		<type name="text"/>
-	</column>
-	<column name="phone">
-		<type name="varchar" length="20"/>
 	</column>
 	<column name="states">
 		<type name="text"/>
@@ -136,6 +130,12 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<column name="email">
 		<type name="varchar" length="100"/>
 	</column>
+	<column name="cell_phone">
+		<type name="varchar" length="20"/>
+	</column>
+	<column name="phone">
+		<type name="varchar" length="20"/>
+	</column>
 	<constraint name="key_company" type="pk-constr" factor="10" table="&quot;User&quot;.companies">
 		<columns names="id" ref-type="src-columns"/>
 	</constraint>
@@ -152,9 +152,21 @@ CAUTION: Do not modify this file unless you know what you are doing.
 
 <table name="employees">
 	<schema name="&quot;Company&quot;"/>
-	<position x="577" y="303"/>
+	<position x="576" y="305"/>
 	<column name="id">
 		<type name="bigserial"/>
+	</column>
+	<column name="city">
+		<type name="varchar" length="100"/>
+	</column>
+	<column name="street">
+		<type name="varchar" length="200"/>
+	</column>
+	<column name="num_ext">
+		<type name="varchar" length="5"/>
+	</column>
+	<column name="num_int">
+		<type name="varchar" length="5"/>
 	</column>
 	<constraint name="key_employees" type="pk-constr" factor="10" table="&quot;Company&quot;.employees">
 		<columns names="id" ref-type="src-columns"/>
@@ -197,9 +209,6 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<column name="id" not-null="true">
 		<type name="bigserial"/>
 	</column>
-	<column name="description">
-		<type name="text"/>
-	</column>
 	<column name="use_inventory">
 		<type name="boolean"/>
 	</column>
@@ -214,6 +223,9 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	</column>
 	<column name="name" not-null="true">
 		<type name="varchar" length="60"/>
+	</column>
+	<column name="description">
+		<type name="text"/>
 	</column>
 	<constraint name="key_product" type="pk-constr" factor="10" table="&quot;Kitchen&quot;.products_and_supplies">
 		<columns names="id" ref-type="src-columns"/>
@@ -243,9 +255,6 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<position x="1179" y="21"/>
 	<column name="id">
 		<type name="bigserial"/>
-	</column>
-	<column name="name" not-null="true">
-		<type name="varchar" length="30"/>
 	</column>
 	<column name="salary">
 		<type name="double precision"/>
@@ -442,6 +451,9 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<column name="give_permissions">
 		<type name="boolean"/>
 	</column>
+	<column name="name" not-null="true">
+		<type name="varchar" length="30"/>
+	</column>
 	<constraint name="key_roles" type="pk-constr" factor="10" table="&quot;Employee&quot;.roles_employees">
 		<columns names="id" ref-type="src-columns"/>
 	</constraint>
@@ -475,11 +487,11 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<column name="id">
 		<type name="bigserial"/>
 	</column>
-	<column name="description">
-		<type name="text"/>
-	</column>
 	<column name="name" not-null="true">
 		<type name="varchar" length="100"/>
+	</column>
+	<column name="description">
+		<type name="text"/>
 	</column>
 	<constraint name="key_areas" type="pk-constr" factor="10" table="&quot;Employee&quot;.departments_employees">
 		<columns names="id" ref-type="src-columns"/>
@@ -510,12 +522,9 @@ CAUTION: Do not modify this file unless you know what you are doing.
 
 <table name="customers">
 	<schema name="&quot;Company&quot;"/>
-	<position x="580" y="450"/>
+	<position x="581" y="499"/>
 	<column name="id" not-null="true">
 		<type name="bigserial"/>
-	</column>
-	<column name="email" not-null="true">
-		<type name="text"/>
 	</column>
 	<column name="street" not-null="true">
 		<type name="text"/>
@@ -528,9 +537,6 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	</column>
 	<column name="cell_phone">
 		<type name="varchar" length="20"/>
-	</column>
-	<column name="num_int">
-		<type name="varchar" length="8"/>
 	</column>
 	<column name="states" not-null="true">
 		<type name="text"/>
@@ -555,6 +561,12 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	</column>
 	<column name="city" not-null="true">
 		<type name="text"/>
+	</column>
+	<column name="email" not-null="true">
+		<type name="text"/>
+	</column>
+	<column name="num_int">
+		<type name="varchar" length="8"/>
 	</column>
 	<constraint name="key_customer" type="pk-constr" factor="10" table="&quot;Company&quot;.customers">
 		<columns names="id" ref-type="src-columns"/>
@@ -608,9 +620,6 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<column name="id" not-null="true">
 		<type name="bigserial"/>
 	</column>
-	<column name="representative">
-		<type name="text"/>
-	</column>
 	<column name="municipality" not-null="true">
 		<type name="text"/>
 	</column>
@@ -618,9 +627,6 @@ CAUTION: Do not modify this file unless you know what you are doing.
 		<type name="text"/>
 	</column>
 	<column name="num_ext">
-		<type name="varchar" length="8"/>
-	</column>
-	<column name="num_int">
 		<type name="varchar" length="8"/>
 	</column>
 	<column name="postal_code" not-null="true">
@@ -646,6 +652,12 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	</column>
 	<column name="address">
 		<type name="varchar" length="40"/>
+	</column>
+	<column name="representative">
+		<type name="text"/>
+	</column>
+	<column name="num_int">
+		<type name="varchar" length="8"/>
 	</column>
 	<constraint name="key_branches" type="pk-constr" factor="10" table="&quot;Company&quot;.branches">
 		<columns names="id" ref-type="src-columns"/>
@@ -714,15 +726,6 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<column name="id" not-null="true">
 		<type name="bigserial"/>
 	</column>
-	<column name="price_1" not-null="true">
-		<type name="double precision"/>
-	</column>
-	<column name="revenue_1" not-null="true">
-		<type name="double precision"/>
-	</column>
-	<column name="price_2">
-		<type name="double precision"/>
-	</column>
 	<column name="revenue_2">
 		<type name="double precision"/>
 	</column>
@@ -748,6 +751,15 @@ CAUTION: Do not modify this file unless you know what you are doing.
 		<type name="double precision"/>
 	</column>
 	<column name="product_cost" not-null="true">
+		<type name="double precision"/>
+	</column>
+	<column name="price_1" not-null="true">
+		<type name="double precision"/>
+	</column>
+	<column name="revenue_1" not-null="true">
+		<type name="double precision"/>
+	</column>
+	<column name="price_2">
 		<type name="double precision"/>
 	</column>
 	<constraint name="key_dish_features" type="pk-constr" factor="10" table="&quot;Inventory&quot;.dish_and_combo_features">
@@ -784,14 +796,14 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<column name="id">
 		<type name="bigserial"/>
 	</column>
+	<column name="comentary">
+		<type name="text"/>
+	</column>
 	<column name="commander_date">
 		<type name="timestamp"/>
 	</column>
 	<column name="status">
 		<type name="integer"/>
-	</column>
-	<column name="comentary">
-		<type name="text"/>
 	</column>
 	<constraint name="key_commander" type="pk-constr" factor="10" table="&quot;Inventory&quot;.commanders">
 		<columns names="id" ref-type="src-columns"/>
@@ -813,14 +825,14 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<column name="id">
 		<type name="bigserial"/>
 	</column>
+	<column name="table_number">
+		<type name="integer"/>
+	</column>
 	<column name="num_customers" default-value="0">
 		<type name="smallint"/>
 	</column>
 	<column name="name">
 		<type name="varchar" length="30"/>
-	</column>
-	<column name="table_number">
-		<type name="integer"/>
 	</column>
 	<constraint name="key_table" type="pk-constr" factor="10" table="&quot;Branch&quot;.tables">
 		<columns names="id" ref-type="src-columns"/>
@@ -842,15 +854,6 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<column name="id">
 		<type name="bigserial"/>
 	</column>
-	<column name="commentary">
-		<type name="text"/>
-	</column>
-	<column name="status">
-		<type name="integer"/>
-	</column>
-	<column name="customer_name">
-		<type name="varchar" length="100"/>
-	</column>
 	<column name="customer_phone">
 		<type name="varchar" length="20"/>
 	</column>
@@ -871,6 +874,15 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	</column>
 	<column name="number_of_children">
 		<type name="integer"/>
+	</column>
+	<column name="commentary">
+		<type name="text"/>
+	</column>
+	<column name="status">
+		<type name="integer"/>
+	</column>
+	<column name="customer_name">
+		<type name="varchar" length="100"/>
 	</column>
 	<constraint name="key_reservation" type="pk-constr" factor="100" table="&quot;Branch&quot;.reservation">
 		<columns names="id" ref-type="src-columns"/>
@@ -983,11 +995,11 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<column name="id">
 		<type name="bigserial"/>
 	</column>
-	<column name="name" not-null="true">
-		<type name="varchar" length="100"/>
-	</column>
 	<column name="description">
 		<type name="text"/>
+	</column>
+	<column name="name" not-null="true">
+		<type name="varchar" length="100"/>
 	</column>
 	<constraint name="key_product_category" type="pk-constr" factor="100" table="&quot;Kitchen&quot;.product_category">
 		<columns names="id" ref-type="src-columns"/>
@@ -1000,11 +1012,11 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<column name="id">
 		<type name="bigserial"/>
 	</column>
-	<column name="name" not-null="true">
-		<type name="varchar" length="100"/>
-	</column>
 	<column name="description">
 		<type name="text"/>
+	</column>
+	<column name="name" not-null="true">
+		<type name="varchar" length="100"/>
 	</column>
 	<constraint name="key_product_department" type="pk-constr" factor="100" table="&quot;Kitchen&quot;.product_department">
 		<columns names="id" ref-type="src-columns"/>
@@ -1082,14 +1094,14 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<column name="id" not-null="true">
 		<type name="bigserial"/>
 	</column>
-	<column name="ip_printer">
-		<type name="inet"/>
-	</column>
 	<column name="ip">
 		<type name="inet"/>
 	</column>
 	<column name="num_box">
 		<type name="int2"/>
+	</column>
+	<column name="ip_printer">
+		<type name="inet"/>
 	</column>
 	<constraint name="key_boxes" type="pk-constr" factor="10" table="&quot;Branch&quot;.boxes">
 		<columns names="id" ref-type="src-columns"/>
@@ -1133,9 +1145,6 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<column name="id">
 		<type name="bigserial"/>
 	</column>
-	<column name="credit_days">
-		<type name="smallint"/>
-	</column>
 	<column name="comment">
 		<type name="text"/>
 	</column>
@@ -1160,6 +1169,9 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<column name="credit_limit">
 		<type name="double precision"/>
 	</column>
+	<column name="credit_days">
+		<type name="smallint"/>
+	</column>
 	<constraint name="key_suppliers_branch" type="pk-constr" factor="10" table="&quot;Branch&quot;.providers">
 		<columns names="id" ref-type="src-columns"/>
 	</constraint>
@@ -1179,12 +1191,6 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<position x="907" y="1085"/>
 	<column name="id" not-null="true">
 		<type name="bigserial"/>
-	</column>
-	<column name="num_int">
-		<type name="varchar" length="8"/>
-	</column>
-	<column name="postal_code">
-		<type name="varchar" length="10"/>
 	</column>
 	<column name="rfc" not-null="true">
 		<type name="text"/>
@@ -1206,6 +1212,12 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	</column>
 	<column name="num_ext">
 		<type name="varchar" length="8"/>
+	</column>
+	<column name="num_int">
+		<type name="varchar" length="8"/>
+	</column>
+	<column name="postal_code">
+		<type name="varchar" length="10"/>
 	</column>
 	<constraint name="key_billing_information" type="pk-constr" factor="10" table="&quot;Branch&quot;.billing_information">
 		<columns names="id" ref-type="src-columns"/>
@@ -1240,9 +1252,6 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<column name="id">
 		<type name="bigserial"/>
 	</column>
-	<column name="name">
-		<type name="varchar" length="100"/>
-	</column>
 	<column name="description">
 		<type name="text"/>
 	</column>
@@ -1251,6 +1260,9 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	</column>
 	<column name="barcode">
 		<type name="text"/>
+	</column>
+	<column name="name">
+		<type name="varchar" length="100"/>
 	</column>
 	<constraint name="key_dishes_and_combos" type="pk-constr" factor="10" table="&quot;Kitchen&quot;.dishes_and_combos">
 		<columns names="id" ref-type="src-columns"/>
@@ -1274,14 +1286,14 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<column name="id">
 		<type name="bigserial"/>
 	</column>
-	<column name="description">
-		<type name="text"/>
-	</column>
 	<column name="floor">
 		<type name="integer"/>
 	</column>
 	<column name="name">
 		<type name="varchar" length="30"/>
+	</column>
+	<column name="description">
+		<type name="text"/>
 	</column>
 	<constraint name="key_restaurant_area" type="pk-constr" factor="10" table="&quot;Branch&quot;.restaurant_area">
 		<columns names="id" ref-type="src-columns"/>
@@ -1356,11 +1368,11 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<column name="id">
 		<type name="bigint"/>
 	</column>
-	<column name="move">
-		<type name="double precision"/>
-	</column>
 	<column name="comment">
 		<type name="text"/>
+	</column>
+	<column name="move">
+		<type name="double precision"/>
 	</column>
 	<constraint name="key_movement_history" type="pk-constr" factor="10" table="&quot;Box&quot;.movement_history">
 		<columns names="id" ref-type="src-columns"/>
@@ -1484,9 +1496,6 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<column name="id">
 		<type name="bigserial"/>
 	</column>
-	<column name="purchase_price">
-		<type name="double precision"/>
-	</column>
 	<column name="sale_amount">
 		<type name="double precision"/>
 	</column>
@@ -1510,6 +1519,9 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	</column>
 	<column name="purchase_unity">
 		<type name="integer"/>
+	</column>
+	<column name="purchase_price">
+		<type name="double precision"/>
 	</column>
 	<constraint name="key_product_features2" type="pk-constr" factor="10" table="&quot;Inventory&quot;.product_and_suppiles_features">
 		<columns names="id" ref-type="src-columns"/>
